@@ -4,7 +4,8 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
+import javax.lang.model.util.ElementScanner6;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,10 +24,6 @@ public class Robot extends TimedRobot {
 
   private final RomiDrivetrain m_drivetrain = new RomiDrivetrain();
   private int Step = 1;
-  private RomiGyro gyro = new RomiGyro();
-
-  // This line creates a new controller object, which we can use to get inputs from said controller/joystick.
-  private GenericHID controller = new GenericHID(0);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -66,7 +63,6 @@ public class Robot extends TimedRobot {
     System.out.println("Auto selected: " + m_autoSelected);
 
     m_drivetrain.resetEncoders();
-    gyro.reset();
   }
 
   /** This function is called periodically during autonomous. */
@@ -80,16 +76,13 @@ public class Robot extends TimedRobot {
       default:
         if(Step == 1) {
           m_drivetrain.arcadeDrive(0.5, 0);
-          if(m_drivetrain.getRightDistanceInch() >= 12) {
+          if(m_drivetrain.getRightDistanceInch() > 12)
             Step = 2;
-            m_drivetrain.resetEncoders();
-          }
         } else {
           m_drivetrain.arcadeDrive(0, 0.5);
-          if(gyro.getAngleZ() >= 90) {
+          if(m_drivetrain.getRightDistanceInch() > 18)
             Step = 1;
-            gyro.reset();
-          }
+            m_drivetrain.resetEncoders();
         }
         break;
     }
@@ -101,17 +94,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    // WARN: The controller code is written based on my controller, and as such may need to be changed
-
-    // The getRawAxis method allows one to get the value an axis is on
-    // We use axis to get stuff from the joysticks, as it is easy to represent a joystick
-    // like a coordinate grid, which allows us to just extract the x or y axis information from it.
-    double forwardSpeed = -controller.getRawAxis(1);
-    double turnSpeed = -controller.getRawAxis(0);
-
-    m_drivetrain.arcadeDrive(forwardSpeed, turnSpeed);
-  }
+  public void teleopPeriodic() {}
 
   /** This function is called once when the robot is disabled. */
   @Override
