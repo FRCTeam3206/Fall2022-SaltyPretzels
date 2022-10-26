@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,8 +30,6 @@ public class Robot extends TimedRobot {
 
   private int SquareCircle = 1;
   private int SpiralTime = 1;
-
-  // private 
 
   public void square() {
     if(Step == 1) {
@@ -86,7 +85,6 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    SpiralSpeed = 0.8;
   }
 
   /**
@@ -155,7 +153,7 @@ public class Robot extends TimedRobot {
     // We use axis to get stuff from the joysticks, as it is easy to represent a joystick
     // like a coordinate grid, which allows us to just extract the x or y axis information from it.
     double forwardSpeed = -controller.getRawAxis(1);
-    double turnSpeed = -controller.getRawAxis(0);
+    double turnSpeed = 0.65*-controller.getRawAxis(0);
 
     m_drivetrain.arcadeDrive(forwardSpeed, turnSpeed);
   }
