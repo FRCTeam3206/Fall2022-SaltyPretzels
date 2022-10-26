@@ -30,6 +30,8 @@ public class Robot extends TimedRobot {
   private int SquareCircle = 1;
   private int SpiralTime = 1;
 
+  // private 
+
   public void square() {
     if(Step == 1) {
       m_drivetrain.arcadeDrive(0.5, 0);
@@ -122,7 +124,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
       case kCustomAuto:
-        // Put custom auto code here
+        spiral();
         break;
       case kDefaultAuto:
       default:
