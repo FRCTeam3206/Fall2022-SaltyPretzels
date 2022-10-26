@@ -23,7 +23,54 @@ public class Robot extends TimedRobot {
 
   private final RomiDrivetrain m_drivetrain = new RomiDrivetrain();
   private int Step = 1;
+  private int Spiralstep = 1;
+
   private RomiGyro gyro = new RomiGyro();
+
+  private int SquareCircle = 1;
+  private int SpiralTime = 1;
+
+  public void square() {
+    if(Step == 1) {
+      m_drivetrain.arcadeDrive(0.5, 0);
+      if(m_drivetrain.getRightDistanceInch() >= 12) {
+        Step = 2;
+        m_drivetrain.resetEncoders();
+      }
+    } else {
+      m_drivetrain.arcadeDrive(0, 0.5);
+      if(gyro.getAngleZ() >= 90) {
+        Step = 1;
+        gyro.reset();
+      }
+    }
+  }
+
+  public void circle() {
+    m_drivetrain.arcadeDrive(0.7, 0.5);
+  }
+
+  private double SpiralSpeed = 1;
+
+  public void spiral() {
+    if(SpiralTime < 50) {
+      m_drivetrain.arcadeDrive(0.7, SpiralSpeed);
+      SpiralTime = SpiralTime + 1;
+    } else {
+      SpiralTime = 1;
+    if (Spiralstep == 1) {
+      SpiralSpeed = SpiralSpeed - 0.1;
+      if (SpiralSpeed <= 0.4) {
+        Spiralstep = 2;
+      }
+    } else {
+      SpiralSpeed = SpiralSpeed + 0.1;
+      if (SpiralSpeed >= 1) {
+        Spiralstep = 1;
+      }
+    }
+    }
+  }
 
   // This line creates a new controller object, which we can use to get inputs from said controller/joystick.
   private GenericHID controller = new GenericHID(0);
@@ -37,6 +84,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    SpiralSpeed = 0.8;
   }
 
   /**
@@ -78,17 +126,14 @@ public class Robot extends TimedRobot {
         break;
       case kDefaultAuto:
       default:
-        if(Step == 1) {
-          m_drivetrain.arcadeDrive(0.5, 0);
-          if(m_drivetrain.getRightDistanceInch() >= 12) {
-            Step = 2;
-            m_drivetrain.resetEncoders();
-          }
+        if(SquareCircle < 500) {
+          square();
+          SquareCircle = SquareCircle + 1;
         } else {
-          m_drivetrain.arcadeDrive(0, 0.5);
-          if(gyro.getAngleZ() >= 90) {
-            Step = 1;
-            gyro.reset();
+          circle();
+          SquareCircle = SquareCircle + 1;
+          if(SquareCircle > 1000) {
+            SquareCircle = 0;
           }
         }
         break;
@@ -127,5 +172,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    spiral();
+  }
 }
