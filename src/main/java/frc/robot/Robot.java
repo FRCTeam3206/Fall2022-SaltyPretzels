@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +26,7 @@ public class Robot extends TimedRobot {
 
   // This line creates a new controller object, which we can use to get inputs from said controller/joystick.
   private GenericHID controller = new GenericHID(0);
+  private Servo servo = new Servo(3);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -94,8 +96,11 @@ public class Robot extends TimedRobot {
     // like a coordinate grid, which allows us to just extract the x or y axis information from it.
     double forwardSpeed = -controller.getRawAxis(1);
     double turnSpeed = -controller.getRawAxis(0);
+    double servoSpeed = controller.getRawAxis(2);
+    
 
     m_drivetrain.arcadeDrive(forwardSpeed, turnSpeed);
+    servo.set(servoSpeed);
   }
 
   /** This function is called once when the robot is disabled. */
