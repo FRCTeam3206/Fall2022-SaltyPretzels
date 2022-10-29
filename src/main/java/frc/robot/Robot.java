@@ -28,6 +28,17 @@ public class Robot extends TimedRobot {
   private GenericHID controller = new GenericHID(0);
   private Servo servo = new Servo(3);
 
+  private int StopTime = 1;
+  private void Stop() {
+    if(StopTime <= 250) {
+      m_drivetrain.arcadeDrive(0.5, 0);
+      StopTime = StopTime + 1;
+    } else {
+      m_drivetrain.arcadeDrive(0.0, 0.0);
+    }
+    if(StopTime > 250);
+  }
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -77,7 +88,7 @@ public class Robot extends TimedRobot {
         break;
       case kDefaultAuto:
       default:
-        // Put default auto code here
+        
         break;
     }
   }
