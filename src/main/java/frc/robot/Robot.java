@@ -85,6 +85,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() {}
 
   /** This function is called periodically during operator control. */
+
+
+
   @Override
   public void teleopPeriodic() {
     // WARN: The controller code is written based on my controller, and as such may need to be changed
@@ -92,10 +95,10 @@ public class Robot extends TimedRobot {
     // The getRawAxis method allows one to get the value an axis is on
     // We use axis to get stuff from the joysticks, as it is easy to represent a joystick
     // like a coordinate grid, which allows us to just extract the x or y axis information from it.
-    double forwardSpeed = -controller.getRawAxis(1);
-    double turnSpeed = -controller.getRawAxis(0);
+  double forwardSpeed = -controller.getRawAxis(1);
+  double turnSpeed = -controller.getRawAxis(0);
 
-    m_drivetrain.arcadeDrive(forwardSpeed, turnSpeed);
+  m_drivetrain.arcadeDrive(forwardSpeed, turnSpeed*0.7);
   }
 
   /** This function is called once when the robot is disabled. */
