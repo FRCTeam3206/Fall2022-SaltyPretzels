@@ -48,14 +48,19 @@ public class Robot extends TimedRobot {
 
   private void fullTurn() {
     setStep();
+    servoTime = servoTime + 1;
     if(servoStep == 1) {
       servoL.setSpeed(0.5);
+      
     } else {
       if(servoStep == 2) {
-        servoR.setSpeed(0.5);
+        servoR.setAngle(1);
       } else {
         servoT.setSpeed(0.5);
       }
+    }
+    if(servoTime >= 300) {
+      servoTime = 0;
     }
   }
   
