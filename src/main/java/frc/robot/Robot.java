@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,8 +24,41 @@ public class Robot extends TimedRobot {
 
   private final RomiDrivetrain m_drivetrain = new RomiDrivetrain();
 
+
+
   // This line creates a new controller object, which we can use to get inputs from said controller/joystick.
   private GenericHID controller = new GenericHID(0);
+  private Servo servoL = new Servo(3);
+  private Servo servoR = new Servo(2);
+  private Servo servoT = new Servo(4);
+
+  private int servoTime = 1;
+  private int servoStep = 1;
+  private void setStep() {
+    if(servoTime <= 100) {
+      servoStep = 1;
+    } else {
+      if(servoTime > 200) {
+        servoStep = 3;
+      } else {
+        servoStep = 2;
+      }
+    }
+  }
+
+  private void fullTurn() {
+    setStep();
+    if(servoStep == 1) {
+      servoL.setSpeed(0.5);
+    } else {
+      if(servoStep == 2) {
+        servoR.setSpeed(0.5);
+      } else {
+        servoT.setSpeed(0.5);
+      }
+    }
+  }
+  
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -112,5 +146,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    fullTurn();
+  }
 }
