@@ -26,18 +26,52 @@ public class Robot extends TimedRobot {
 
   // This line creates a new controller object, which we can use to get inputs from said controller/joystick.
   private GenericHID controller = new GenericHID(0);
-  private Servo servo = new Servo(3);
+  private Servo Rservo = new Servo(3);
+  private Servo Lservo = new Servo(2);
 
-  private int StopTime = 1;
+  private int Servotime = 1;
+  private double ServoAngle = 0;
+  private int Step = 1;
+
   private void Stop() {
-    if(StopTime <= 250) {
-      m_drivetrain.arcadeDrive(0.5, 0);
-      StopTime = StopTime + 1;
-    } else {
-      m_drivetrain.arcadeDrive(0.0, 0.0);
-    }
-    if(StopTime > 250);
+    if(Step == 1) { 
+      if(Servotime >= 0) {
+        ServoAngle = ServoAngle + 1;
+        Servotime = Servotime + 1;
+        if(Servotime <= 200) {
+          Rservo.setAngle(ServoAngle);
+       } else {
+         Step = 2;
+         Servotime = 1;
+       }
+
+     }
+   }
+   if(Step == 2) {
+     if(Servotime >= 0) {
+       ServoAngle = ServoAngle -1;
+       Servotime = Servotime + 1;
+       if(Servotime <= 200) {
+         Rservo.setAngle(ServoAngle);
+       } else {
+         Step = 1;
+         Servotime = 1;
+       }
+     }
+
+   }
   }
+
+  private void Test1() {
+    Lservo.setAngle(180.0);
+  }
+  private void Test2() {
+    Lservo.setAngle(-180.0);
+  }
+  private void Test3() {
+    Lservo.setAngle(0.0);
+  }
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -111,7 +145,7 @@ public class Robot extends TimedRobot {
     
 
     m_drivetrain.arcadeDrive(forwardSpeed, turnSpeed);
-    servo.set(servoSpeed);
+    Rservo.set(servoSpeed);
   }
 
   /** This function is called once when the robot is disabled. */
@@ -128,5 +162,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    Stop();
+  }
 }
