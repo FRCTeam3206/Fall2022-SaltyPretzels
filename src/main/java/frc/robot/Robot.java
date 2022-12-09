@@ -28,22 +28,39 @@ public class Robot extends TimedRobot {
 
   // This line creates a new controller object, which we can use to get inputs from said controller/joystick.
   private GenericHID controller = new GenericHID(0);
-  private Servo servoL = new Servo(3);
-  private Servo servoR = new Servo(2);
-  private Servo servoT = new Servo(4);
+  private Servo servoL = new Servo(2);
+  private Servo servoR = new Servo(3);
 
   private int servoTime = 1;
   private int servoStep = 1;
+  private int ServoAngle = 1;
+
   private void setStep() {
-    if(servoTime <= 100) {
-      servoStep = 1;
+    if(servoStep == 1) {
+     if(servoTime >= 0) {
+       servoTime = servoTime + 1;
+       ServoAngle = ServoAngle + 1;
+      if(servoTime <= 200) {
+      servoR.setAngle(ServoAngle);
     } else {
-      if(servoTime > 200) {
-        servoStep = 3;
-      } else {
-        servoStep = 2;
+      servoStep = 2;
+      servoTime = 1;
       }
     }
+    }
+
+  if(servoStep == 2) {
+    if(servoTime >= 0) {
+      servoTime = servoTime + 1;
+      ServoAngle = ServoAngle - 1;
+     if(servoTime <= 200) {
+     servoR.setAngle(ServoAngle);
+   } else {
+     servoStep = 1;
+     servoTime = 1;
+     }
+   }
+   }
   }
 
   private void fullTurn() {
@@ -56,7 +73,7 @@ public class Robot extends TimedRobot {
       if(servoStep == 2) {
         servoR.setAngle(1);
       } else {
-        servoT.setSpeed(0.5);
+        servoL.setSpeed(0.5);
       }
     }
     if(servoTime >= 300) {
@@ -121,7 +138,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+  
+    
+  }
 
   /** This function is called periodically during operator control. */
   @Override
@@ -133,9 +153,13 @@ public class Robot extends TimedRobot {
     // like a coordinate grid, which allows us to just extract the x or y axis information from it.
     double forwardSpeed = -controller.getRawAxis(1);
     double turnSpeed = -controller.getRawAxis(0);
+    double servoTurn = controller.getRawAxis(2);
 
-    m_drivetrain.arcadeDrive(forwardSpeed, turnSpeed);
+    m_drivetrain.arcadeDrive(forwardSpeed, -0.5*turnSpeed);
+    servoR.set(servoTurn);
+  
   }
+  
 
   /** This function is called once when the robot is disabled. */
   @Override
@@ -152,6 +176,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    fullTurn();
+    setStep();
   }
 }
