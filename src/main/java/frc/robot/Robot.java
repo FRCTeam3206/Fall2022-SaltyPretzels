@@ -153,10 +153,13 @@ public class Robot extends TimedRobot {
     // like a coordinate grid, which allows us to just extract the x or y axis information from it.
     double forwardSpeed = -controller.getRawAxis(1);
     double turnSpeed = -controller.getRawAxis(0);
-    double servoTurn = controller.getRawAxis(2);
+    double servoTurn = -controller.getRawAxis(2);
+    int servoTurn2 = controller.getPOV(0);
+    
 
-    m_drivetrain.arcadeDrive(forwardSpeed, -0.5*turnSpeed);
+    m_drivetrain.arcadeDrive(forwardSpeed, -0.75*turnSpeed);
     servoR.set(servoTurn);
+    servoL.set(servoTurn2);
   
   }
   
