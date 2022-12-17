@@ -6,8 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.MathUtil;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -22,6 +24,12 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private final RomiDrivetrain m_drivetrain = new RomiDrivetrain();
+
+  private Servo sLift = new Servo(2);
+  private Servo sGrip = new Servo(3);
+
+  private int sLiftAngle = 90;
+  private int sGripAngle = 90;
 
   // This line creates a new controller object, which we can use to get inputs from said controller/joystick.
   private GenericHID controller = new GenericHID(0);
@@ -95,10 +103,28 @@ public class Robot extends TimedRobot {
     // The getRawAxis method allows one to get the value an axis is on
     // We use axis to get stuff from the joysticks, as it is easy to represent a joystick
     // like a coordinate grid, which allows us to just extract the x or y axis information from it.
-  double forwardSpeed = -controller.getRawAxis(1);
-  double turnSpeed = -controller.getRawAxis(0);
+    double forwardSpeed = -controller.getRawAxis(1);
+    double turnSpeed = controller.getRawAxis(0);
 
-  m_drivetrain.arcadeDrive(forwardSpeed, turnSpeed*0.7);
+    if (controller.getPOV() == 0 ) {
+      sLiftAngle += 1;
+    } else if (controller.getPOV() == 180 ) {
+      sLiftAngle -= 1;
+    }
+    sLiftAngle = MathUtil.clamp(sLiftAngle, 60, 145);
+    sLift.setAngle(sLiftAngle);
+    SmartDashboard.putNumber("Lift Angle", sLiftAngle);
+
+    if (controller.getPOV() == 90 ) {
+      sGripAngle += 1;
+    } else if (controller.getPOV() == 270 ) {
+      sGripAngle -= 1;
+    }
+    sGripAngle = MathUtil.clamp(sGripAngle, 0, 105);
+    sGrip.setAngle(sGripAngle);
+    SmartDashboard.putNumber("Grip Angle", sGripAngle);
+
+    m_drivetrain.arcadeDrive(forwardSpeed, turnSpeed*0.7);
   }
 
   /** This function is called once when the robot is disabled. */
