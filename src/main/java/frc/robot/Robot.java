@@ -30,6 +30,75 @@ public class Robot extends TimedRobot {
 
   private int sLiftAngle = 90;
   private int sGripAngle = 90;
+  
+  private int step = 1
+    
+  Public void RedAuton() {
+  if(step == 1) {
+  sLiftAngle.setAngle(60);
+  sGripAngle.setAngle(0);
+  m_drivetrain.aracadeDrive(0.5, 0.0);
+  if(m_drivetrain.getRightDistanceInch() >= 2) {
+    m_drivetrain.aracadeDrive(0.0, 0.0);
+    Step = 2;
+}
+}
+  if(step == 2) {
+  sGripAngle.setAngle(105);
+  step = 3;
+}
+  if(step == 3) {
+  m_drivetrain.aracadeDrive(0.0, 0.5);
+  if(Gyro.getAngleZ >= 180)  {
+   m_drivetrain.aracadeDrive(0.0, 0.0);
+   Step = 4;
+}
+}
+  if(step == 4) {
+  m_drivetrain.aracadeDrive(0.5, 0.0);
+  if(m_drivetrain.getRightDistanceInch() >= 16) {
+   m_drivetrain.aracadeDrive(0.0, 0.0);
+   Step = 5;
+}
+}
+  if(step == 5) {
+  m_drivetrain.aracadeDrive(0.0, -0.5);
+  if(Gyro.getAngleZ >= -90)  {
+   m_drivetrain.aracadeDrive(0.0, 0.0);
+   Step = 6;
+}
+}
+
+  if(step == 6) {
+  m_drivetrain.aracadeDrive(0.5, 0.0);
+  if(m_drivetrain.getRightDistanceInch() >= 30) {
+   m_drivetrain.aracadeDrive(0.0, 0.0);
+   Step = 7;
+}
+}
+ If(step == 7) {
+ m_drivetrain.aracadeDrive(0.0, 0.5);
+  if(Gyro.getAngleZ >= 90)  {
+   m_drivetrain.aracadeDrive(0.0, 0.0);
+   Step = 8;
+}
+}
+  if(step == 8) {
+  m_drivetrain.aracadeDrive(0.5, 0.0);
+  if(m_drivetrain.getRightDistanceInch() >= 14) {
+   sLiftAngle.setAngle(145);
+    if(m_drivetrain.getRightDistanceInch() >=6) {
+    m_drivetrain.aracadeDrive(0.0, 0.0);
+   Step = 9;
+}
+}
+}
+  if(step == 9) {
+  sGripAngle.setAngle(0);
+  sLiftAngle.setAngle(80);
+}
+}
+
 
   // This line creates a new controller object, which we can use to get inputs from said controller/joystick.
   private GenericHID controller = new GenericHID(0);
