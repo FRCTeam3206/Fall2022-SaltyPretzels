@@ -34,6 +34,31 @@ public class Robot extends TimedRobot {
   private int servoTime = 1;
   private int servoStep = 1;
   private int ServoAngle = 1;
+  private int step = 1;
+  private int time = 1;
+
+  private void auton() {
+    if(step == 1) {
+    m_drivetrain.arcadeDrive(0.5, 0.5);
+    if(m_drivetrain.getRightDistanceInch() >= 2) {
+      m_drivetrain.arcadeDrive(0.0, 0.0);
+      step = 2;
+    }
+    }
+    if(step == 2) {
+    m_drivetrain.arcadeDrive(0.5, 0.0);
+    time = time + 1;
+    if(time >= 50) {
+      m_drivetrain.arcadeDrive(0.0, 0.0);
+      step =3;
+    }
+    }
+    if(step == 3) {
+      m_drivetrain.arcadeDrive(0.5, 0.5);
+      }
+    }
+
+}
 
   private void setStep() {
     if(servoStep == 1) {
@@ -157,7 +182,7 @@ public class Robot extends TimedRobot {
     int servoTurn2 = controller.getPOV(0);
     
 
-    m_drivetrain.arcadeDrive(forwardSpeed, -0.75*turnSpeed);
+    m_drivetrain.arcadeDrive(forwardSpeed, -0.5*turnSpeed);
     servoR.set(servoTurn);
     servoL.set(servoTurn2);
   
